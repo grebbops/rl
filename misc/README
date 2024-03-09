@@ -1,0 +1,56 @@
+<!-- omit from toc -->
+# rl
+
+`rl` is a command line utility with various helpers for working with releases.
+
+It includes:
+
+- [rl](#rl)
+
+## Atlassian Jira API Helpers
+
+Release Creation and API Helpers for release notes.
+
+- [ ] Release Creation with Prompts for Inputs
+
+## Broadcom Rally API Helpers
+
+- [ ] Timebox and Release Tag Creation
+
+## Atlassian Confluence API Helpers 
+
+For working with release wikis and sourcing content from Atlassian Jira.
+
+- [ ] Fast wiki creation for ab-hoc release requests
+- [ ] Release Calendar event management and creation
+
+## Teams Announcement Generation
+
+Various scripts to output and copy announcment templates with variable-replaced details based on input.
+
+- [ ] Generation of responses to requests for releases
+
+## GitHub Actions
+
+- [ ] Teams Release Announcements
+- [ ] Release Creation in Atlassian Jira
+- [ ] Release Wiki Creation in Atlassian Confluence
+
+## Data Manipulation
+
+Tools for working with lists of user stories, defects, issues, sub-tasks, etc.
+
+- [ ] Broadcom Rally User Story and Defect Content CRUD
+  - [ ] Reading US data and building CSVs for Data Reporting and Spreadsheet Tools
+  - [ ] Reading US data and building Release Wikis
+
+# Requirements
+
+- `jq`: [Read more](https://jqlang.github.io/jq/)
+- `python` and [`python-dateutil`](https://pypi.org/project/python-dateutil/)
+- a `bash` flavored shell: Windows users can use [Git Bash](https://www.atlassian.com/git/tutorials/git-bash)
+  - also consider [enabling `sudo` for Windows](https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/)
+
+# Contributing
+
+## Requirements
