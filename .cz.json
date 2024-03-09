@@ -114,11 +114,6 @@
               "default": true
             },
             {
-              "value": "general",
-              "name": "general: Work with scripts.",
-              "key": "g"
-            },
-            {
               "value": "scripts",
               "name": "scripts: Work with scripts.",
               "key": "s"
