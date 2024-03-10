@@ -123,6 +123,10 @@
               "name": "github: GitHub Actions, Workflows, etc."
             },
             {
+              "value": "teams",
+              "name": "teams: Teams integrations and payload templates."
+            },
+            {
               "value": "docker",
               "name": "docker: Changes to Dockerfiles/build steps."
             }
