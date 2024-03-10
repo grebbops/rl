@@ -123,6 +123,18 @@
               "name": "github: GitHub Actions, Workflows, etc."
             },
             {
+              "value": "jira",
+              "name": "jira: Work with Jira API and Scripts."
+            },
+            {
+              "value": "confluence",
+              "name": "confluence: Work with Confluence API and Scripts."
+            },
+            {
+              "value": "rally",
+              "name": "rally: Rally integrations and scripts."
+            },
+            {
               "value": "teams",
               "name": "teams: Teams integrations and payload templates."
             },
