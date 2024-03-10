@@ -5,8 +5,19 @@ export RLPATH=$(dirname $(realpath $0))
 export LIB=$RLPATH/../lib
 
 source $LIB/helpers/_index.sh
+source $LIB/jira/_index.sh
+source $LIB/confluence/_index.sh
 
 hello
+
+if [[ "$1" == "jira" ]]; then
+  jira "$2"
+elif [[ "$1" == "confluence" || "$1" == "c" ]]; then
+  confluence "$2"
+else
+  echo "Usage: $0 {command1 <arg>|command2 [<arg>]}"
+  exit 1
+fi
 
 # TODO: rl start (rl c s) [--version -v (optional)] [--description -d (optional)] - release start (create release without start or end dates)
 # TODO: rl rs [version] [description] --start (-s) --end (-e) - release start (create release with optional start and finish)
