@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# refferable relative path of rl
+export RLPATH=$(dirname $(realpath $0))
+export LIB=$RLPATH/../lib
+
+source $LIB/helpers/_index.sh
+
+hello
+
+# TODO: rl start (rl c s) [--version -v (optional)] [--description -d (optional)] - release start (create release without start or end dates)
+# TODO: rl rs [version] [description] --start (-s) --end (-e) - release start (create release with optional start and finish)
+# TODO: optionally allows version name to be specified
+# if not specified, the cli will prompt for a name and suggest one
+# TODO: optionally allows description to be added
+# TODO: optionally allows release date to be set
+
+# TODO: if no name is given, prompt for if sprint or ad-hoc release
+
+# TODO: handle same version name with prompt to append a 1 if no `.n` in name (eg .0 .1 .2 etc aren't included). display the name to create and "y" / "n".
+# TODO: handle same version with prompt to append next 'n' version if `.n` is included. display the name to create and "y" / "n".
+
+# TODO: rl rf [version] - relase finish (finish release)
+
+# TODO: Error handling for Jira
+
+# 400 - "A version with this name already exists in this project."

@@ -1,11 +1,61 @@
 <!-- omit from toc -->
 # rl
 
-`rl` is a command line utility with various helpers for working with releases.
+`rl` is a command line utility with various helpers for working with releases and Application Lifecycle Management (ALM) APIs.
 
-It includes:
+- [Installation](#installation)
+  - [Requirements](#requirements)
+  - [Installation Steps](#installation-steps)
+- [`rl` Features](#rl-features)
+  - [Atlassian Jira API Helpers](#atlassian-jira-api-helpers)
+  - [Broadcom Rally API Helpers](#broadcom-rally-api-helpers)
+  - [Atlassian Confluence API Helpers](#atlassian-confluence-api-helpers)
+  - [Teams Announcement Generation](#teams-announcement-generation)
+  - [GitHub Actions](#github-actions)
+  - [Data Manipulation](#data-manipulation)
+- [Contributing](#contributing)
+  - [Development Requirements](#development-requirements)
 
-- [rl](#rl)
+# Installation
+
+## Requirements
+
+- `jq`: [Read more](https://jqlang.github.io/jq/)
+- `python` and [`python-dateutil`](https://pypi.org/project/python-dateutil/)
+- a `bash` flavored shell: Windows users can use [Git Bash](https://www.atlassian.com/git/tutorials/git-bash)
+  - also consider [enabling `sudo` for Windows](https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/)
+
+## Installation Steps
+
+- clone the repo
+- `cd rl/bin`
+- `sudo ln -fs $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/rl /usr/local/bin/rl`
+  - note: for Windows users, the `cp` command should be used, with variation in the path: 
+  - `cp -s $( cd "$( dirname "$0" )" && pwd -W )/rl /c/Users/<username>/bin/rl`
+- reload shell
+- test `rl` with no args:
+
+```shell
+❯ rl
+
+   /\
+  (  )
+  (  )
+ /|/\|\
+/_||||_\
+
+```
+
+Your mileage may vary — check paths and system nuances. Windows and macOS have variations of standard *nix commands, and the Windows filesystem and paths are tricky.
+
+You could also just add this to path via `~/.bashrc`, `~/.bash_profile`, `~/.zshrc`, etc.
+
+- add this line `export PATH="/c/Users/<username>/path/to/repo/bin:$PATH"`
+- or this line `export PATH="/path/to/repo/bin:$PATH"`
+
+**GLHF**
+
+# `rl` Features
 
 ## Atlassian Jira API Helpers
 
@@ -44,13 +94,6 @@ Tools for working with lists of user stories, defects, issues, sub-tasks, etc.
   - [ ] Reading US data and building CSVs for Data Reporting and Spreadsheet Tools
   - [ ] Reading US data and building Release Wikis
 
-# Requirements
-
-- `jq`: [Read more](https://jqlang.github.io/jq/)
-- `python` and [`python-dateutil`](https://pypi.org/project/python-dateutil/)
-- a `bash` flavored shell: Windows users can use [Git Bash](https://www.atlassian.com/git/tutorials/git-bash)
-  - also consider [enabling `sudo` for Windows](https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/)
-
 # Contributing
 
-## Requirements
+## Development Requirements
