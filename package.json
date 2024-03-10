@@ -1,0 +1,15 @@
+{
+  "name": "rl",
+  "version": "0.0.1",
+  "description": "A collection of command line utils for release management.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "marked": "marked"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "marked": "^12.0.1"
+  }
+}
