@@ -114,9 +114,9 @@
               "default": true
             },
             {
-              "value": "scripts",
-              "name": "scripts: Work with scripts.",
-              "key": "s"
+              "value": "cli",
+              "name": "cli: CLI work.",
+              "key": "c"
             },
             {
               "value": "github",
