@@ -3,19 +3,20 @@
 # refferable relative path of rl
 export RLPATH=$(dirname $(realpath $0))
 export LIB=$RLPATH/../lib
+export H=$LIB/helpers
 
-source $LIB/helpers/_index.sh
+source $H/_colors.sh
 source $LIB/jira/_index.sh
 source $LIB/confluence/_index.sh
 
-hello
+sh $H/hello.sh
 
 if [[ "$1" == "jira" ]]; then
   jira "$2"
 elif [[ "$1" == "confluence" || "$1" == "c" ]]; then
   confluence "$2"
 else
-  echo "Usage: $0 {command1 <arg>|command2 [<arg>]}"
+  sh $H/help.sh
   exit 1
 fi
 
