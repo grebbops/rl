@@ -1,5 +1,4 @@
-<!-- omit from toc -->
-# release-tools
+# release-tools<!-- omit from toc -->
 
 `rl` is a command line utility with various helpers for working with releases and Application Lifecycle Management (ALM) APIs.
 
