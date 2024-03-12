@@ -1,5 +1,5 @@
 <!-- omit from toc -->
-# rl
+# release-tools
 
 `rl` is a command line utility with various helpers for working with releases and Application Lifecycle Management (ALM) APIs.
 
@@ -28,7 +28,7 @@
 ## Installation Steps
 
 - clone the repo
-- `cd rl/bin`
+- `cd release-tools/rl/bin`
 - `sudo ln -fs $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/rl /usr/local/bin/rl`
   - note: for Windows users, the `cp` command should be used, with variation in the path: 
   - `cp -s $( cd "$( dirname "$0" )" && pwd -W )/rl /c/Users/<username>/bin/rl`
@@ -50,8 +50,8 @@ Your mileage may vary — check paths and system nuances. Windows and macOS hav
 
 You could also just add this to path via `~/.bashrc`, `~/.bash_profile`, `~/.zshrc`, etc.
 
-- add this line `export PATH="/c/Users/<username>/path/to/repo/bin:$PATH"`
-- or this line `export PATH="/path/to/repo/bin:$PATH"`
+- add this line `export PATH="/c/Users/<username>/path/to/repo/rl/bin:$PATH"`
+- or this line `export PATH="/path/to/repo/rl/bin:$PATH"`
 
 **GLHF**
 
