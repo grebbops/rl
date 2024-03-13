@@ -6,15 +6,49 @@ export LIB=$RLPATH/../lib
 export H=$LIB/helpers
 
 source $H/_colors.sh
-source $LIB/jira/_index.sh
+source $LIB/jira.sh
 source $LIB/confluence/_index.sh
 
 sh $H/hello.sh
 
+# import env vars, usually for local testing
+source $RLPATH/../.config/.env.sh
+
 if [[ "$1" == "jira" ]]; then
-  jira "$2"
+
+  shift
+  jira "$1" "$2" "$3"
+
 elif [[ "$1" == "confluence" || "$1" == "c" ]]; then
-  confluence "$2"
+
+  # confluence "$2"
+  CREDS="${JIRA_API_USER}:${JIRA_API_TOKEN}"
+  ENCODED_AUTH=$(echo -n "$CREDS" | base64)
+
+  # PAGE_BODY=$(node $LIB/../node_modules/marked/bin/main.js )
+
+  read -r -d '' DATA <<-EOF
+  {
+    "type": "long",
+    "title": "oh my word another page!",
+    "space": {
+        "key": "DG"
+    },
+    "spaceId": $CONFLUENCE_SPACE_ID,
+    "body": {
+        "storage": {
+            "value": "<h1>well hello there</h1><p>i am a paragraph</p><h2>i am a heading level 2</h2><p>i am <em>another</em> paragraph.</p>",
+            "representation": "storage"
+        }
+    }
+  }"
+EOF
+
+  curl --location $CONFLUENCE_API_URL/pages \
+    --header 'Content-Type: application/json' \
+    --header 'Accept: application/json' \
+    --header "Authorization: Basic ${ENCODED_AUTH}" \
+    --data "$DATA" --trace-ascii -
 else
   sh $H/help.sh
   exit 1
