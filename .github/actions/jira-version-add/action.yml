@@ -1,0 +1,82 @@
+name: "Setup Release Tools"
+description: "Check out files and set up environment."
+
+inputs:
+  WORKSPACE_ROOT:
+    description: Working Directory
+    required: false
+    default: "."
+  JIRA_URL:
+    description: "Jira Instance URL."
+    required: true
+  JIRA_API_URL:
+    description: "Jira API URL."
+    required: true
+  JIRA_API_USER:
+    description: "Jira API USER."
+    required: false
+  JIRA_API_TOKEN:
+    description: "Jira API TOKEN."
+    required: true
+  JIRA_PROJECT_KEY:
+    description: "Jira version name."
+    required: true
+  JIRA_VERSION_IDENTIFIER:
+    description: "Jira version identifier. E.g. 24.05.04.0 or 24.Q2.3.0."
+    required: true
+    default: "YY.QQ.NN.I"
+  JIRA_VERSION_DESCRIPTION:
+    description: "Jira version description."
+    required: true
+    default: ""
+  JIRA_VERSION_RELEASED:
+    description: "Whether the version should be marked released."
+    required: true
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Set Project Vars"
+      shell: bash
+      working-directory: ${{ inputs.WORKSPACE_ROOT }}
+      run: |
+        echo "JIRA_API_URL=${{ inputs.JIRA_API_URL }}" >>$GITHUB_ENV
+        echo "JIRA_API_USER=${{ inputs.JIRA_API_USER }}" >>$GITHUB_ENV
+        echo "JIRA_API_TOKEN=${{ inputs.JIRA_API_TOKEN }}" >>$GITHUB_ENV
+        echo "JIRA_PROJECT_KEY=${{ inputs.JIRA_PROJECT_KEY }}" >>$GITHUB_ENV
+        echo "JIRA_VERSION_IDENTIFIER=${{ inputs.JIRA_VERSION_IDENTIFIER }}" >>$GITHUB_ENV
+        echo "JIRA_VERSION_DESCRIPTION=${{ inputs.JIRA_VERSION_DESCRIPTION || 'Test' }}" >>$GITHUB_ENV
+        echo "JIRA_VERSION_RELEASED=${{ inputs.JIRA_VERSION_RELEASED }}" >>$GITHUB_ENV
+        echo "JIRA_VERSION_NAME=${{ inputs.JIRA_PROJECT_KEY }}-R-${{ inputs.JIRA_VERSION_IDENTIFIER }}" >>$GITHUB_ENV
+        echo "JIRA_PROJECT_ID=$(curl \
+          --location "${{ inputs.JIRA_API_URL }}/project/${{ inputs.JIRA_PROJECT_KEY }}" \
+          --header 'Accept: application/json' \
+          --header 'Content-Type: application/json' \
+          --header "Authorization: Basic ${{ inputs.JIRA_API_TOKEN }}" | jq -r '.id')" >>$GITHUB_ENV
+
+    - name: "Create Version"
+      shell: bash
+      env:
+        PAYLOAD_BODY: >
+          {
+            "archived": false,
+            "description": "${{ env.JIRA_VERSION_DESCRIPTION }}",
+            "name": "${{ env.JIRA_VERSION_NAME }}",
+            "projectId": ${{ env.JIRA_PROJECT_ID }},
+            "released": ${{ env.JIRA_VERSION_RELEASED || 'false' }}
+          }
+      run: |
+        echo "Payload Body:"
+        echo "$PAYLOAD_BODY"
+        echo "JIRA_VERSION_ID=$(curl -s -X POST "${{ env.JIRA_API_URL }}/version" \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json' \
+          -H "Authorization: Basic ${{ env.JIRA_API_TOKEN }}" \
+          -d "$PAYLOAD_BODY" | jq '.id')" >> $GITHUB_ENV
+
+    - name: "Jira Version ${{ env.JIRA_VERSION_NAME }}"
+      shell: bash
+      run: |
+        echo "# ${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_STEP_SUMMARY
+        echo "<a href=\"${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}\">View ${{ env.JIRA_VERSION_NAME }}</a> on Jira." >>$GITHUB_STEP_SUMMARY
