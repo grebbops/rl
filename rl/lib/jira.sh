@@ -19,17 +19,19 @@ jira() {
     }
 EOF
 
-  response=$(curl -X POST -i --location "${JIRA_API_URL}/version" \
-    --header 'Accept: application/json' \
-    --header 'Content-Type: application/json' \
-    --header "Authorization: Basic ${ENCODED_AUTH}" \
-    --data "$DATA")
+  {
+    RESPONSE=$(curl -X POST -i --location "${JIRA_API_URL}/version" \
+      --header 'Accept: application/json' \
+      --header 'Content-Type: application/json' \
+      --header "Authorization: Basic ${ENCODED_AUTH}" \
+      --data "$DATA")
 
-  # Extract the URL of the created version
-  RELEASE_ID=$(echo "$response" | grep -o '"id": *"[^"]*' | awk -F'"' '{print $4}')
+    # Extract the URL of the created version
+    RELEASE_ID=$(echo "$RESPONSE" | grep -o '"id": *"[^"]*' | awk -F'"' '{print $4}')
+  } 2>/dev/null
   URL="$JIRA_URL/projects/$JIRA_PROJECT_ID/versions/$RELEASE_ID"
 
-  echo "Take a look: $URL"
+  echo "Fix Version: $URL"
 
 }
 

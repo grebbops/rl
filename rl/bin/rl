@@ -6,68 +6,49 @@ export LIB=$RLPATH/../lib
 export H=$LIB/helpers
 
 source $H/_colors.sh
+source $H/prompt-input.sh
 source $LIB/jira.sh
-source $LIB/confluence/_index.sh
+source $LIB/confluence.sh
 
 sh $H/hello.sh
 
 # import env vars, usually for local testing
 source $RLPATH/../.config/.env.sh
 
-if [[ "$1" == "jira" ]]; then
+if [[ "$1" == "jira" || "$1" == "j" ]]; then
 
   shift
   jira "$1" "$2" "$3"
 
 elif [[ "$1" == "confluence" || "$1" == "c" ]]; then
 
-  # confluence "$2"
-  CREDS="${JIRA_API_USER}:${JIRA_API_TOKEN}"
-  ENCODED_AUTH=$(echo -n "$CREDS" | base64)
+  shift
+  confluence "$1" "$2" "$3"
 
-  # PAGE_BODY=$(node $LIB/../node_modules/marked/bin/main.js )
+elif [[ "$1" == "new-release" || "$1" == "nr" ]]; then
 
-  read -r -d '' DATA <<-EOF
-  {
-    "type": "long",
-    "title": "oh my word another page!",
-    "space": {
-        "key": "DG"
-    },
-    "spaceId": $CONFLUENCE_SPACE_ID,
-    "body": {
-        "storage": {
-            "value": "<h1>well hello there</h1><p>i am a paragraph</p><h2>i am a heading level 2</h2><p>i am <em>another</em> paragraph.</p>",
-            "representation": "storage"
-        }
-    }
-  }"
-EOF
+  shift
+  DESCRIPTION=""
+  RELEASED=false
 
-  curl --location $CONFLUENCE_API_URL/pages \
-    --header 'Content-Type: application/json' \
-    --header 'Accept: application/json' \
-    --header "Authorization: Basic ${ENCODED_AUTH}" \
-    --data "$DATA" --trace-ascii -
+  prompt_input "Release Name" RELEASE_NAME required
+  echo
+  prompt_input "Release Description" DESCRIPTION
+  echo
+  prompt_input "Wiki Title" WIKI_TITLE required
+  echo
+  prompt_input "Wiki Markdown Source" MARKDOWN_SOURCE
+  echo
+  echo
+  echo "Setting things up..."
+  echo
+
+  jira "$RELEASE_NAME" "$DESCRIPTION" "$RELEASED"
+  confluence "$WIKI_TITLE" "$MARKDOWN_SOURCE"
+
 else
+
   sh $H/help.sh
   exit 1
+
 fi
-
-# TODO: rl start (rl c s) [--version -v (optional)] [--description -d (optional)] - release start (create release without start or end dates)
-# TODO: rl rs [version] [description] --start (-s) --end (-e) - release start (create release with optional start and finish)
-# TODO: optionally allows version name to be specified
-# if not specified, the cli will prompt for a name and suggest one
-# TODO: optionally allows description to be added
-# TODO: optionally allows release date to be set
-
-# TODO: if no name is given, prompt for if sprint or ad-hoc release
-
-# TODO: handle same version name with prompt to append a 1 if no `.n` in name (eg .0 .1 .2 etc aren't included). display the name to create and "y" / "n".
-# TODO: handle same version with prompt to append next 'n' version if `.n` is included. display the name to create and "y" / "n".
-
-# TODO: rl rf [version] - relase finish (finish release)
-
-# TODO: Error handling for Jira
-
-# 400 - "A version with this name already exists in this project."
