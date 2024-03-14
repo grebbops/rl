@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $RLPATH/../.config/.env
+source $RLPATH/../.config/.env.sh
 
 curl --location $TEAMS_WEBHOOK \
   --header 'Content-Type: application/json' \
@@ -21,7 +21,7 @@ curl --location $TEAMS_WEBHOOK \
         },
         {
           "name": "Due date",
-          "value": "Mon Sep 25 2023 17:07:18 ET-0500 (Eastern Standard Time)"
+          "value": "Mon Sep 25 2030 17:07:18 ET-0500 (Eastern Standard Time)"
         },
         {
           "name": "Status",
