@@ -33,7 +33,7 @@ confluence() {
       }
 EOF
 
-  {d
+  {
     RESPONSE=$(curl -X POST -i --location "${CONFLUENCE_API_URL}/pages" \
       --header 'Accept: application/json' \
       --header 'Content-Type: application/json' \
