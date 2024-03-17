@@ -35,7 +35,7 @@ elif [[ "$1" == "new-release" || "$1" == "nr" ]]; then
   echo
   prompt_input "Release Description" DESCRIPTION
   echo
-  prompt_input "Wiki Title" WIKI_TITLE required
+  prompt_input "Wiki Title" PAGE_TITLE required
   echo
   prompt_input "Wiki Markdown Source" MARKDOWN_SOURCE
   echo
@@ -44,7 +44,7 @@ elif [[ "$1" == "new-release" || "$1" == "nr" ]]; then
   echo
 
   jira "$RELEASE_NAME" "$DESCRIPTION" "$RELEASED"
-  confluence "$WIKI_TITLE" "$MARKDOWN_SOURCE"
+  confluence "$PAGE_TITLE" "$MARKDOWN_SOURCE"
 
 else
 

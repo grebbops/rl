@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "marked": "marked",
-    "pub": "cat confluence/release-wiki-template.md | node node_modules/marked/bin/marked.js"
+    "marked.gh": "node node_modules/marked/bin/marked.js -s",
+    "pub": "cat confluence/release-page-template.md | node node_modules/marked/bin/marked.js"
   },
   "keywords": [],
   "author": "",

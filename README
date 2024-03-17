@@ -68,9 +68,9 @@ Release Creation and API Helpers for release notes.
 
 ## Atlassian Confluence API Helpers 
 
-For working with release wikis and sourcing content from Atlassian Jira.
+For working with release pages and sourcing content from Atlassian Jira.
 
-- [ ] Fast wiki creation for ab-hoc release requests
+- [ ] Fast page creation for ab-hoc release requests
 - [ ] Release Calendar event management and creation
 
 ## Teams Announcement Generation

@@ -12,9 +12,6 @@ inputs:
   JIRA_API_URL:
     description: "Jira API URL."
     required: true
-  JIRA_API_USER:
-    description: "Jira API USER."
-    required: false
   JIRA_API_TOKEN:
     description: "Jira API TOKEN."
     required: true
@@ -33,6 +30,11 @@ inputs:
     description: "Whether the version should be marked released."
     required: true
     default: "false"
+
+outputs:
+  JIRA_VERSION_LINK:
+    description: "The resulting Jira URL of the published version."
+    value: ${{ steps.summary.JIRA_VERSION_URL }}
 
 runs:
   using: "composite"
@@ -76,7 +78,10 @@ runs:
           -d "$PAYLOAD_BODY" | jq '.id')" >> $GITHUB_ENV
 
     - name: "Jira Version ${{ env.JIRA_VERSION_NAME }}"
+      id: summary
       shell: bash
       run: |
+        echo "JIRA_VERSION_URL=${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}" >>$GITHUB_OUTPUT
         echo "# ${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_STEP_SUMMARY
+        echo "${{ outputs.summary.JIRA_VERSION_URL }}"
         echo "<a href=\"${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}\">View ${{ env.JIRA_VERSION_NAME }}</a> on Jira." >>$GITHUB_STEP_SUMMARY

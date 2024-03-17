@@ -1,0 +1,110 @@
+name: "Setup Release Tools"
+description: "Check out files and set up environment."
+
+inputs:
+  NODE_VERSION:
+    description: "The version of Node to use."
+    default: "lts"
+  WORKSPACE_ROOT:
+    description: "Working Directory"
+    required: false
+    default: "."
+  CONFLUENCE_URL:
+    description: "The Conflucne Instance URL."
+    required: true
+  CONFLUENCE_API_URL:
+    description: "The Conflucne API URL."
+    required: true
+  CONFLUENCE_API_TOKEN:
+    description: "Jira API TOKEN."
+    required: true
+  CONFLUENCE_SPACE_KEY:
+    description: "The Conflunece Space in which to create the Wiki. Defaults to Release Management's draft's bucket."
+    default: "DG"
+  CONFLUENCE_PAGE_TITLE:
+    description: "The Title of the Confluence Wiki. Defaults to timestamp and repo name to avoid API duplicate page errors and overwrites."
+    required: true
+    default: "$(date '+%y.%m.%d-%T')"
+  PAGE_MARKDOWN_SOURCE:
+    description: "Markdown source to use for page content. Defaults to basic markdown template included with action. `$(cat markdown.md)` can also be used with a file."
+    default: "# Release Summary<br><br>${{ github.event.inputs.JIRA_VERSION_LINK }}<br><br># System Impacts<br.<br>#Release Schedule<br><br># Deployment Steps<br><br>"
+  JIRA_VERSION_LINK:
+    description: "A link to the Jira version if included."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: "Install Dependencies"
+      shell: bash
+      working-directory: ${{ inputs.WORKSPACE_ROOT }}
+      run: |
+        npm install
+
+    - name: "Set Project Vars"
+      shell: bash
+      env:
+        DEFAULT_TITLE: $(date '+%y.%m.%d-%T')
+      working-directory: ${{ inputs.WORKSPACE_ROOT }}
+      run: |
+        echo "CONFLUENCE_URL=${{ inputs.CONFLUENCE_URL }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_API_URL=${{ inputs.CONFLUENCE_API_URL }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_API_TOKEN=${{ inputs.CONFLUENCE_API_TOKEN }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_SPACE_KEY=${{ inputs.CONFLUENCE_SPACE_KEY }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_PAGE_TITLE=${{ inputs.CONFLUENCE_PAGE_TITLE || env.DEFAULT_TITLE }}" >>$GITHUB_ENV
+        CONFLUENCE_SPACE_RESPONSE=$(curl \
+          --location "${{ inputs.CONFLUENCE_URL }}/wiki/rest/api/space/${{ inputs.CONFLUENCE_SPACE_KEY }}" \
+          --header 'Accept: application/json' \
+          --header 'Content-Type: application/json' \
+          --header "Authorization: Basic ${{ inputs.CONFLUENCE_API_TOKEN }}")
+        echo "CONFLUENCE_SPACE_ID=$(echo $CONFLUENCE_SPACE_RESPONSE | jq -r '.id')" >>$GITHUB_ENV
+
+        JIRA_VERSION_LINK="<a href=\"https://www.something.com\">hi this is a link in palce hofo hte vierision</a>"
+        REPLACED_MARKDOWN=$(sed "s|\[\[JIRA_VERSION_LINK\]\]|$JIRA_VERSION_LINK|g" release-page-template.md)
+        HTML=$(npm run -s marked "$REPLACED_MARKDOWN")
+        TRIMMED_HTML=$(echo $HTML | tr -d '\n')
+        echo "PAGE_BODY=$TRIMMED_HTML" >>$GITHUB_ENV
+
+      # echo "here the html ----------------------------------------------------------"
+      # echo $TRIMMED_HTML
+
+      # echo "SPACE RESPONSE - -----------------------------"
+      # echo "$CONFLUENCE_SPACE_RESPONSE"
+      # echo "SPACE ID - -----------------------------"
+      # echo "id: ${{ env.CONFLUENCE_SPACE_ID }}"
+      # echo $CONFLUENCE_SPACE_RESPONSE | jq '.id'
+
+      # echo "$PAGE_BODY"
+
+    - name: "Create Page"
+      shell: bash
+      env:
+        PAYLOAD_BODY: >
+          {
+            "type": "long",
+            "title": "${{ env.CONFLUENCE_PAGE_TITLE }}",
+            "space": {
+                "key": "DG"
+            },
+            "spaceId": ${{ env.CONFLUENCE_SPACE_ID }},
+            "body": {
+                "storage": {
+                    "value": ${{ toJSON(env.PAGE_BODY) }},
+                    "representation": "storage"
+                }
+            }
+          }
+      run: |
+        echo "Payload Body:"
+        echo "$PAYLOAD_BODY"
+        RESPONSE=$(curl -s -X POST "${{ env.CONFLUENCE_URL }}/wiki/api/v2/pages" \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json' \
+          -H "Authorization: Basic ${{ env.CONFLUENCE_API_TOKEN }}" \
+          -d "$PAYLOAD_BODY")
+        echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+        echo $RESPONSE

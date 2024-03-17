@@ -3,15 +3,15 @@
 confluence() {
 
   MARKED=$LIB/node_modules/marked/bin/marked.js
-  WIKI_MARKDOWN_SOURCE=$LIB/confluence/release-wiki-template.md
+  PAGE_MARKDOWN_SOURCE=$LIB/confluence/release-page-template.md
 
   TITLE=$1
   if [[ "$2" != "" ]]; then
     # if passing in a markdown file
     # TODO: also allow stdin
-    WIKI_MARKDOWN_SOURCE=$2
+    PAGE_MARKDOWN_SOURCE=$2
   fi
-  PAGE_BODY="$(cat $WIKI_MARKDOWN_SOURCE | node $MARKED)"
+  PAGE_BODY="$(cat $PAGE_MARKDOWN_SOURCE | node $MARKED)"
   # --silent when testing complete
 
   TRIMMED_HTML=$(echo "$PAGE_BODY" | tr -d '\n')
@@ -34,7 +34,7 @@ confluence() {
 EOF
 
   {
-    RESPONSE=$(curl -X POST -i --location "${CONFLUENCE_API_URL}/pages" \
+    RESPONSE=$(curl -X POST -i --location "${CONFLUENCE_API_URL}/wikis" \
       --header 'Accept: application/json' \
       --header 'Content-Type: application/json' \
       --header "Authorization: Basic ${ENCODED_AUTH}" \
@@ -46,9 +46,9 @@ EOF
     SHARE_LINK=$(echo "$RESPONSE" | grep -o '"tinyui":"/[^"]*"' | awk -F'"' '{print $4}')
   } 2>/dev/null
 
-  echo "Edit wiki: ${CONFLUENCE_URL}${EDIT_LINK}"
-  echo "View wiki: ${CONFLUENCE_URL}${VIEW_LINK}"
-  echo "Share wiki: ${CONFLUENCE_URL}${SHARE_LINK}"
+  echo "Edit page: ${CONFLUENCE_URL}${EDIT_LINK}"
+  echo "View page: ${CONFLUENCE_URL}${VIEW_LINK}"
+  echo "Share page: ${CONFLUENCE_URL}${SHARE_LINK}"
 
 }
 

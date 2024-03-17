@@ -1,5 +1,5 @@
 name: "🧑‍🚀 Example Release Workflow"
-run-name: "🧑‍🚀 Creating release branch, wiki, version, and CM request."
+run-name: "🧑‍🚀 Creating release branch, page, version, and CM request."
 
 on:
   workflow_dispatch:
@@ -44,7 +44,6 @@ jobs:
           WORKSPACE_ROOT: .github/actions/jira-version-add
           JIRA_URL: ${{ vars.JIRA_URL }}
           JIRA_API_URL: ${{ vars.JIRA_API_URL }}
-          JIRA_API_USER: ${{ secrets.JIRA_API_USER }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           JIRA_PROJECT_KEY: ${{ inputs.JIRA_PROJECT_KEY }}
           JIRA_VERSION_IDENTIFIER: ${{ inputs.JIRA_VERSION_IDENTIFIER }}

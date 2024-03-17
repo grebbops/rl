@@ -1,0 +1,75 @@
+name: "🧑‍🚀 Example Release and Page Creation Workflow"
+run-name: "🧑‍🚀 Creating release branch, page, version, and CM request."
+
+on:
+  workflow_dispatch:
+    inputs:
+      CONFLUENCE_SPACE_KEY:
+        type: choice
+        description: "The Confluence space key in which this page will be created."
+        required: true
+        options:
+          - DG
+          - RL
+
+      CONFLUENCE_PAGE_TITLE:
+        description: "The title for the Confluence Page."
+
+      JIRA_PROJECT_KEY:
+        type: choice
+        description: "The Jira project key in which this page will be created."
+        required: true
+        options:
+          - DG
+          - BAG
+
+      JIRA_VERSION_IDENTIFIER:
+        description: "The version identifier, which will be concatenated with 'KEY-R-'."
+        required: true
+        default: "YY.QQ.N.N.0"
+
+      JIRA_VERSION_DESCRIPTION:
+        description: "A description of the Jira version."
+        required: false
+
+concurrency:
+  group: "release-request"
+  cancel-in-progress: true
+
+jobs:
+  release-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 𐂷 Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 1
+          sparse-checkout: |
+            .github
+
+      # - name: Create Jira Version
+      #   uses: ./.github/actions/jira-version-add
+      #   with:
+      #     WORKSPACE_ROOT: .github/actions/jira-version-add
+      #     JIRA_URL: ${{ vars.JIRA_URL }}
+      #     JIRA_API_URL: ${{ vars.JIRA_API_URL }}
+      #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      #     JIRA_PROJECT_KEY: ${{ inputs.JIRA_PROJECT_KEY }}
+      #     JIRA_VERSION_IDENTIFIER: ${{ inputs.JIRA_VERSION_IDENTIFIER }}
+      #     JIRA_VERSION_DESCRIPTION: ${{ inputs.JIRA_VERSION_DESCRIPTION }}
+      #     JIRA_VERSION_RELEASED: ${{ inputs.JIRA_VERSION_RELEASED }}
+
+      - name: Create Confluence Page
+        uses: ./.github/actions/confluence-page-create
+        with:
+          WORKSPACE_ROOT: .github/actions/confluence-page-create
+          NODE_VERSION: "20"
+          CONFLUENCE_URL: ${{ vars.CONFLUENCE_URL }}
+          CONFLUENCE_API_URL: ${{ vars.CONFLUENCE_API_URL }}
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          CONFLUENCE_SPACE_KEY: "DG"
+          CONFLUENCE_PAGE_TITLE: ${{ inputs.CONFLUENCE_PAGE_TITLE }}
+          JIRA_VERSION_LINK: '<a href="https://dgrebb.atlassian.net/projects/DG/versions/10028" rel="nofollow">View DG-R-24.03.16.3</a>'
+          # ${{  }}
