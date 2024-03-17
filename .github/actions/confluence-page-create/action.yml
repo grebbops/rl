@@ -99,10 +99,11 @@ runs:
         PAGE_PERMALINK_URL=$(echo "$RESPONSE" | jq -r '._links.tinyui')
         PAGE_LONG_URL=$(echo "$RESPONSE" | jq -r '._links.webui')
 
-        echo "# ${{ env.CONFLUENCE_PAGE_TITLE }}" >>$GITHUB_STEP_SUMMARY
-        echo "<a href=\"${{ env.CONFLUENCE_URL }}${PAGE_LONG_URL}\">VIEW</a> the Release Page." >>$GITHUB_STEP_SUMMARY
-        echo "<a href=\"${{ env.CONFLUENCE_URL }}${PAGE_EDIT_URL}\">Edit</a> the Release Page." >>$GITHUB_STEP_SUMMARY
-        echo "Share the Release Page:" >>$GITHUB_STEP_SUMMARY
+        echo "# Release Page" >>$GITHUB_STEP_SUMMARY
+        echo "## ${{ env.CONFLUENCE_PAGE_TITLE }}" >>$GITHUB_STEP_SUMMARY
+        echo "<a href=\"${{ env.CONFLUENCE_URL }}/wiki${PAGE_LONG_URL}\">VIEW</a> the Release Page." >>$GITHUB_STEP_SUMMARY
+        echo "<a href=\"${{ env.CONFLUENCE_URL }}/wiki${PAGE_EDIT_URL}\">Edit</a> the Release Page." >>$GITHUB_STEP_SUMMARY
+        echo "## Share the Release Page:" >>$GITHUB_STEP_SUMMARY
         echo '```' >>$GITHUB_STEP_SUMMARY
         echo "${{ env.CONFLUENCE_URL }}${PAGE_PERMALINK_URL}" >>$GITHUB_STEP_SUMMARY
         echo '```' >>$GITHUB_STEP_SUMMARY

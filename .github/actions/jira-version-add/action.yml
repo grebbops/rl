@@ -86,5 +86,6 @@ runs:
       run: |
         echo "JIRA_VERSION_URL=${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}" >>$GITHUB_OUTPUT
         echo "JIRA_VERSION_NAME=${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_OUTPUT
-        echo "# ${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_STEP_SUMMARY
+        echo "# Version Details" >>$GITHUB_STEP_SUMMARY
+        echo "## ${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_STEP_SUMMARY
         echo "<a href=\"${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}\">View ${{ env.JIRA_VERSION_NAME }}</a> on Jira." >>$GITHUB_STEP_SUMMARY

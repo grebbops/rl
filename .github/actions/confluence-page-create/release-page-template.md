@@ -1,6 +1,6 @@
-# ✨ [[JIRA_VERSION_LINK]] Release Summary
+# ✨ Summary
 
-
+- Release: [[JIRA_VERSION_LINK]]
 
 # ㎝ Change Management
 
