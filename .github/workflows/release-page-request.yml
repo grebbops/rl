@@ -49,19 +49,24 @@ jobs:
           sparse-checkout: |
             .github
 
-      # - name: Create Jira Version
-      #   uses: ./.github/actions/jira-version-add
-      #   with:
-      #     WORKSPACE_ROOT: .github/actions/jira-version-add
-      #     JIRA_URL: ${{ vars.JIRA_URL }}
-      #     JIRA_API_URL: ${{ vars.JIRA_API_URL }}
-      #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-      #     JIRA_PROJECT_KEY: ${{ inputs.JIRA_PROJECT_KEY }}
-      #     JIRA_VERSION_IDENTIFIER: ${{ inputs.JIRA_VERSION_IDENTIFIER }}
-      #     JIRA_VERSION_DESCRIPTION: ${{ inputs.JIRA_VERSION_DESCRIPTION }}
-      #     JIRA_VERSION_RELEASED: ${{ inputs.JIRA_VERSION_RELEASED }}
+      - name: Create Jira Version
+        id: jira-version
+        uses: ./.github/actions/jira-version-add
+        with:
+          WORKSPACE_ROOT: .github/actions/jira-version-add
+          JIRA_URL: ${{ vars.JIRA_URL }}
+          JIRA_API_URL: ${{ vars.JIRA_API_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_PROJECT_KEY: ${{ inputs.JIRA_PROJECT_KEY }}
+          JIRA_VERSION_IDENTIFIER: ${{ inputs.JIRA_VERSION_IDENTIFIER }}
+          JIRA_VERSION_DESCRIPTION: ${{ inputs.JIRA_VERSION_DESCRIPTION }}
+          JIRA_VERSION_RELEASED: ${{ inputs.JIRA_VERSION_RELEASED }}
 
       - name: Create Confluence Page
+        if: steps.jira-version.outcome == 'success'
+        env:
+          URL: ${{ steps.jira-version.outputs.JIRA_VERSION_URL }}
+          NAME: ${{ steps.jira-version.outputs.JIRA_VERSION_NAME }}
         uses: ./.github/actions/confluence-page-create
         with:
           WORKSPACE_ROOT: .github/actions/confluence-page-create
@@ -71,5 +76,4 @@ jobs:
           CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
           CONFLUENCE_SPACE_KEY: "DG"
           CONFLUENCE_PAGE_TITLE: ${{ inputs.CONFLUENCE_PAGE_TITLE }}
-          JIRA_VERSION_LINK: '<a href="https://dgrebb.atlassian.net/projects/DG/versions/10028" rel="nofollow">View DG-R-24.03.16.3</a>'
-          # ${{  }}
+          JIRA_VERSION_LINK: '<a href="${{ env.URL }}" rel="nofollow">${{ env.JIRA_VERSION_NAME }}</a>'

@@ -45,40 +45,32 @@ runs:
       run: |
         npm install
 
-    - name: "Set Project Vars"
+    - name: "Set Vars and Generate HTML"
       shell: bash
       env:
         DEFAULT_TITLE: $(date '+%y.%m.%d-%T')
       working-directory: ${{ inputs.WORKSPACE_ROOT }}
       run: |
-        echo "CONFLUENCE_URL=${{ inputs.CONFLUENCE_URL }}" >>$GITHUB_ENV
-        echo "CONFLUENCE_API_URL=${{ inputs.CONFLUENCE_API_URL }}" >>$GITHUB_ENV
-        echo "CONFLUENCE_API_TOKEN=${{ inputs.CONFLUENCE_API_TOKEN }}" >>$GITHUB_ENV
-        echo "CONFLUENCE_SPACE_KEY=${{ inputs.CONFLUENCE_SPACE_KEY }}" >>$GITHUB_ENV
-        echo "CONFLUENCE_PAGE_TITLE=${{ inputs.CONFLUENCE_PAGE_TITLE || env.DEFAULT_TITLE }}" >>$GITHUB_ENV
-        CONFLUENCE_SPACE_RESPONSE=$(curl \
+        CONFLUENCE_SPACE_RESPONSE=$(curl -s \
           --location "${{ inputs.CONFLUENCE_URL }}/wiki/rest/api/space/${{ inputs.CONFLUENCE_SPACE_KEY }}" \
           --header 'Accept: application/json' \
           --header 'Content-Type: application/json' \
           --header "Authorization: Basic ${{ inputs.CONFLUENCE_API_TOKEN }}")
         echo "CONFLUENCE_SPACE_ID=$(echo $CONFLUENCE_SPACE_RESPONSE | jq -r '.id')" >>$GITHUB_ENV
-
-        JIRA_VERSION_LINK="<a href=\"https://www.something.com\">hi this is a link in palce hofo hte vierision</a>"
-        REPLACED_MARKDOWN=$(sed "s|\[\[JIRA_VERSION_LINK\]\]|$JIRA_VERSION_LINK|g" release-page-template.md)
-        HTML=$(npm run -s marked "$REPLACED_MARKDOWN")
-        TRIMMED_HTML=$(echo $HTML | tr -d '\n')
+        JIRA_VERSION_LINK='${{ inputs.JIRA_VERSION_LINK }}'
+        MARKDOWN=$(sed "s|\[\[JIRA_VERSION_LINK\]\]|$JIRA_VERSION_LINK|g" release-page-template.md)
+        HTML=$(npm run -s marked -- "$MARKDOWN")
+        echo "unkempt thnmawlml"
+        echo "$HTML"
+        TRIMMED_HTML=$(echo "$HTML" | tr -d '\n')
         echo "PAGE_BODY=$TRIMMED_HTML" >>$GITHUB_ENV
-
-      # echo "here the html ----------------------------------------------------------"
-      # echo $TRIMMED_HTML
-
-      # echo "SPACE RESPONSE - -----------------------------"
-      # echo "$CONFLUENCE_SPACE_RESPONSE"
-      # echo "SPACE ID - -----------------------------"
-      # echo "id: ${{ env.CONFLUENCE_SPACE_ID }}"
-      # echo $CONFLUENCE_SPACE_RESPONSE | jq '.id'
-
-      # echo "$PAGE_BODY"
+        echo "trimmed baoauehtml"
+        echo "$TRIMMED_HTML"
+        echo "CONFLUENCE_URL=${{ inputs.CONFLUENCE_URL }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_API_URL=${{ inputs.CONFLUENCE_API_URL }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_API_TOKEN=${{ inputs.CONFLUENCE_API_TOKEN }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_SPACE_KEY=${{ inputs.CONFLUENCE_SPACE_KEY }}" >>$GITHUB_ENV
+        echo "CONFLUENCE_PAGE_TITLE=${{ inputs.CONFLUENCE_PAGE_TITLE || env.DEFAULT_TITLE }}" >>$GITHUB_ENV
 
     - name: "Create Page"
       shell: bash

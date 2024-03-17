@@ -32,9 +32,12 @@ inputs:
     default: "false"
 
 outputs:
-  JIRA_VERSION_LINK:
-    description: "The resulting Jira URL of the published version."
-    value: ${{ steps.summary.JIRA_VERSION_URL }}
+  JIRA_VERSION_NAME:
+    description: "The resulting Jira Version name."
+    value: ${{ steps.summary.outputs.JIRA_VERSION_NAME }}
+  JIRA_VERSION_URL:
+    description: "The resulting Jira Version URL."
+    value: ${{ steps.summary.outputs.JIRA_VERSION_URL }}
 
 runs:
   using: "composite"
@@ -48,7 +51,7 @@ runs:
         echo "JIRA_API_TOKEN=${{ inputs.JIRA_API_TOKEN }}" >>$GITHUB_ENV
         echo "JIRA_PROJECT_KEY=${{ inputs.JIRA_PROJECT_KEY }}" >>$GITHUB_ENV
         echo "JIRA_VERSION_IDENTIFIER=${{ inputs.JIRA_VERSION_IDENTIFIER }}" >>$GITHUB_ENV
-        echo "JIRA_VERSION_DESCRIPTION=${{ inputs.JIRA_VERSION_DESCRIPTION || 'Test' }}" >>$GITHUB_ENV
+        echo "JIRA_VERSION_DESCRIPTION=${{ inputs.JIRA_VERSION_DESCRIPTION || '' }}" >>$GITHUB_ENV
         echo "JIRA_VERSION_RELEASED=${{ inputs.JIRA_VERSION_RELEASED }}" >>$GITHUB_ENV
         echo "JIRA_VERSION_NAME=${{ inputs.JIRA_PROJECT_KEY }}-R-${{ inputs.JIRA_VERSION_IDENTIFIER }}" >>$GITHUB_ENV
         echo "JIRA_PROJECT_ID=$(curl \
@@ -75,13 +78,13 @@ runs:
           -H 'Accept: application/json' \
           -H 'Content-Type: application/json' \
           -H "Authorization: Basic ${{ env.JIRA_API_TOKEN }}" \
-          -d "$PAYLOAD_BODY" | jq '.id')" >> $GITHUB_ENV
+          -d "$PAYLOAD_BODY" | jq -r '.id')" >> $GITHUB_ENV
 
     - name: "Jira Version ${{ env.JIRA_VERSION_NAME }}"
       id: summary
       shell: bash
       run: |
         echo "JIRA_VERSION_URL=${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}" >>$GITHUB_OUTPUT
+        echo "JIRA_VERSION_NAME=${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_OUTPUT
         echo "# ${{ env.JIRA_VERSION_NAME }}" >>$GITHUB_STEP_SUMMARY
-        echo "${{ outputs.summary.JIRA_VERSION_URL }}"
         echo "<a href=\"${{ inputs.JIRA_URL }}/projects/${{ inputs.JIRA_PROJECT_KEY }}/versions/${{ env.JIRA_VERSION_ID }}\">View ${{ env.JIRA_VERSION_NAME }}</a> on Jira." >>$GITHUB_STEP_SUMMARY
