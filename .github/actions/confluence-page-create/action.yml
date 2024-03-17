@@ -60,12 +60,8 @@ runs:
         JIRA_VERSION_LINK='${{ inputs.JIRA_VERSION_LINK }}'
         MARKDOWN=$(sed "s|\[\[JIRA_VERSION_LINK\]\]|$JIRA_VERSION_LINK|g" release-page-template.md)
         HTML=$(npm run -s marked -- "$MARKDOWN")
-        echo "unkempt thnmawlml"
-        echo "$HTML"
         TRIMMED_HTML=$(echo "$HTML" | tr -d '\n')
         echo "PAGE_BODY=$TRIMMED_HTML" >>$GITHUB_ENV
-        echo "trimmed baoauehtml"
-        echo "$TRIMMED_HTML"
         echo "CONFLUENCE_URL=${{ inputs.CONFLUENCE_URL }}" >>$GITHUB_ENV
         echo "CONFLUENCE_API_URL=${{ inputs.CONFLUENCE_API_URL }}" >>$GITHUB_ENV
         echo "CONFLUENCE_API_TOKEN=${{ inputs.CONFLUENCE_API_TOKEN }}" >>$GITHUB_ENV
