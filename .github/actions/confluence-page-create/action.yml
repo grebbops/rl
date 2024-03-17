@@ -31,6 +31,11 @@ inputs:
   JIRA_VERSION_LINK:
     description: "A link to the Jira version if included."
 
+outputs:
+  CONFLUENCE_PAGE_URL:
+    description: "Permalink to the page."
+    value: ${{ steps.confluence-page.outputs.CONFLUENCE_PAGE_URL }}
+
 runs:
   using: "composite"
   steps:
@@ -69,6 +74,7 @@ runs:
         echo "CONFLUENCE_PAGE_TITLE=${{ inputs.CONFLUENCE_PAGE_TITLE || env.DEFAULT_TITLE }}" >>$GITHUB_ENV
 
     - name: "Create Page"
+      id: confluence-page
       shell: bash
       env:
         PAYLOAD_BODY: >
@@ -98,6 +104,7 @@ runs:
         PAGE_EDIT_URL=$(echo "$RESPONSE" | jq -r '._links.editui')
         PAGE_PERMALINK_URL=$(echo "$RESPONSE" | jq -r '._links.tinyui')
         PAGE_LONG_URL=$(echo "$RESPONSE" | jq -r '._links.webui')
+        echo "CONFLUENCE_PAGE_URL=${{ inputs.CONFLUENCE_URL }}/wiki${PAGE_PERMALINK_URL}" >>$GITHUB_OUTPUT
 
         echo "# Release Page" >>$GITHUB_STEP_SUMMARY
         echo "## ${{ env.CONFLUENCE_PAGE_TITLE }}" >>$GITHUB_STEP_SUMMARY

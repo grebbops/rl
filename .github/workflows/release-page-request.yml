@@ -63,6 +63,7 @@ jobs:
           JIRA_VERSION_RELEASED: ${{ inputs.JIRA_VERSION_RELEASED }}
 
       - name: Create Confluence Page
+        id: confluence-page
         if: steps.jira-version.outcome == 'success'
         env:
           URL: ${{ steps.jira-version.outputs.JIRA_VERSION_URL }}
@@ -77,3 +78,14 @@ jobs:
           CONFLUENCE_SPACE_KEY: "DG"
           CONFLUENCE_PAGE_TITLE: ${{ inputs.CONFLUENCE_PAGE_TITLE }}
           JIRA_VERSION_LINK: '<a href="${{ env.URL }}" rel="nofollow">${{ env.JIRA_VERSION_NAME }}</a>'
+
+      - name: Teams Alert
+        if: steps.confluence-page.outcome == 'success'
+        env:
+          JIRA_VERSION_URL: ${{ steps.jira-version.outputs.JIRA_VERSION_URL }}
+          CONFLUENCE_PAGE_URL: ${{ steps.confluence-page.outputs.CONFLUENCE_PAGE_URL }}
+        uses: ./.github/actions/teams-announcement
+        with:
+          JIRA_VERSION_URL: ${{ env.JIRA_VERSION_URL }}
+          CONFLUENCE_PAGE_URL: ${{ env.CONFLUENCE_PAGE_URL }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}

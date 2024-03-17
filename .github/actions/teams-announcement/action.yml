@@ -1,0 +1,75 @@
+name: "Send Release Management Request"
+description: "Send RM's Teams channel a request for CM and release."
+
+inputs:
+  WORKSPACE_ROOT:
+    description: Working Directory
+    required: false
+    default: "."
+  JIRA_VERSION_URL:
+    description: "Jira Version URL."
+    required: true
+  CONFLUENCE_PAGE_URL:
+    description: "Link to release notes."
+    required: true
+  TEAMS_WEBHOOK_URL:
+    description: "The Microsoft Teams Webhook for Notifications"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Send Payload"
+      shell: bash
+      env:
+        PAYLOAD_BODY: >
+          {
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "0076D7",
+            "summary": "New Deployment Request",
+            "sections": [
+              {
+                "activityTitle": "New Deployment Request",
+                "activitySubtitle": "For: Process Ops",
+                "activityImage": "https://i.ibb.co/qp6xSY3/product-release.png",
+                "facts": [
+                  {
+                    "name": "Assigned to",
+                    "value": "Unassigned"
+                  },
+                  {
+                    "name": "Due date",
+                    "value": "Wed May 1 2024 00:00:00 ET-0500 (Eastern Standard Time)"
+                  }
+                ],
+                "markdown": true
+              }
+            ],
+            "potentialAction": [
+              {
+                "@type": "OpenUri",
+                "name": "Release Notes",
+                "targets": [
+                  {
+                    "os": "default",
+                    "uri": "${{ inputs.CONFLUENCE_PAGE_URL }}"
+                  }
+                ]
+              },
+              {
+                "@type": "OpenUri",
+                "name": "Jira Version",
+                "targets": [
+                  {
+                    "os": "default",
+                    "uri": "${{ inputs.JIRA_VERSION_URL }}"
+                  }
+                ]
+              }
+            ]
+          }
+      run: |
+        curl --location "${{ inputs.TEAMS_WEBHOOK_URL}}" \
+          --header 'Content-Type: application/json' \
+          --data-raw "$PAYLOAD_BODY"
