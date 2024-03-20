@@ -1,50 +1,43 @@
 # ㎝ Change Management
 
+<p></p>
 
 # ✨ Release Summary
 
-This release will include haphazardly thrown together bash scripts calling:
-
-- the Jira API to create a release
-- the Confluence API to create a release page
-- the Teams API to post an announcement requesting a release
-- the Change Management tool to create a draft CM ticket
-- GitHub Actions to automate all of the above, along with:
-  - the option to this markdown text with the release branch's PR description
-  - inputs for:
-    - release name
-    - page name
-  - secrets for:
-    - Jira project_id 
-    - Jira API user/token
-    - Confluence API user/token
-    - Confluence space_id (if a team wants to use their own space)
+<p></p>
 
 # 📋 Release Notes
 
-- general notes about the release
+<p></p>
 
 # 💥 Cross-Team Impacts
 
+<p></p>
 
 # 📦 Artifcats, Builds, and Configuration
 
+<p></p>
 
 ## This Release
 
+- 
 
 ## Last Release
 
-- link to the previous release page (possibly automated)
+- 
 
 # ⏱️ Release Schedule
 
+<p></p>
 
 # ⎌ Rollback Steps
 
+<p></p>
 
 # 🔬 Monitoring & Dashboards
 
+<p></p>
 
 # ℹ Contacts & Oncall
 
+<p></p>

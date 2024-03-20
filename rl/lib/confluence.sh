@@ -21,32 +21,39 @@ confluence() {
 
   read -r -d '' DATA <<-EOF
       {
-        "type": "long",
+        "type": "page",
         "title": "$TITLE",
-        "spaceId": "$CONFLUENCE_SPACE_ID",
+        "space": {
+            "key": "$CONFLUENCE_SPACE_KEY"
+        },
         "body": {
             "storage": {
                 "value": "$TRIMMED_HTML",
                 "representation": "storage"
             }
-        }
+        },
+        "ancestors": [
+            {
+                "id": "1283555841"
+            }
+        ]
       }
 EOF
 
   {
-    RESPONSE=$(curl -X POST -i --location "${CONFLUENCE_API_URL}/wikis" \
+    RESPONSE=$(curl -X POST -s --location "${CONFLUENCE_API_URL}/content" \
       --header 'Accept: application/json' \
       --header 'Content-Type: application/json' \
-      --header "Authorization: Basic ${ENCODED_AUTH}" \
+      --header "Authorization: Bearer ${CONFLUENCE_API_TOKEN}" \
       --data "$DATA")
 
     # Extract the editui link using grep
-    EDIT_LINK=$(echo "$RESPONSE" | grep -o '"editui":"/[^"]*"' | awk -F'"' '{print $4}')
-    VIEW_LINK=$(echo "$RESPONSE" | grep -o '"webui":"/[^"]*"' | awk -F'"' '{print $4}')
-    SHARE_LINK=$(echo "$RESPONSE" | grep -o '"tinyui":"/[^"]*"' | awk -F'"' '{print $4}')
+    PAGE_ID=$(echo "$RESPONSE" | jq -r '.id')
+    VIEW_LINK=$(echo "$RESPONSE" | jq -r '._links.webui')
+    SHARE_LINK=$(echo "$RESPONSE" | jq -r '._links.tinyui')
   } 2>/dev/null
 
-  echo "Edit page: ${CONFLUENCE_URL}${EDIT_LINK}"
+  echo "Edit page: https://etwiki.sys.comcast.net/pages/editpage.action?pageId=${PAGE_ID}"
   echo "View page: ${CONFLUENCE_URL}${VIEW_LINK}"
   echo "Share page: ${CONFLUENCE_URL}${SHARE_LINK}"
 

@@ -20,16 +20,16 @@ jira() {
 EOF
 
   {
-    RESPONSE=$(curl -X POST -i --location "${JIRA_API_URL}/version" \
+    RESPONSE=$(curl -X POST -s --location "${JIRA_API_URL}/version" \
       --header 'Accept: application/json' \
       --header 'Content-Type: application/json' \
-      --header "Authorization: Basic ${ENCODED_AUTH}" \
+      --header "Authorization: Bearer ${JIRA_API_TOKEN}" \
       --data "$DATA")
 
     # Extract the URL of the created version
-    RELEASE_ID=$(echo "$RESPONSE" | grep -o '"id": *"[^"]*' | awk -F'"' '{print $4}')
+    RELEASE_ID=$(echo "$RESPONSE" | jq -r '.id')
   } 2>/dev/null
-  URL="$JIRA_URL/projects/$JIRA_PROJECT_ID/versions/$RELEASE_ID"
+  URL="${JIRA_URL}/projects/${JIRA_PROJECT_KEY}/versions/${RELEASE_ID}"
 
   echo "Fix Version: $URL"
 
