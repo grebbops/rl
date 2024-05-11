@@ -1,0 +1,105 @@
+{
+  "type": "message",
+  "attachments": [
+    {
+      "contentType": "application/vnd.microsoft.card.adaptive",
+      "contentUrl": null,
+      "content": {
+        "type": "AdaptiveCard",
+        "summary": "Release Announcement",
+        "msTeams": {
+          "width": "full"
+        },
+        "body": [
+          {
+            "type": "Container",
+            "spacing": "none",
+            "style": "default",
+            "bleed": true,
+            "minHeight": "5px",
+            "backgroundImage": {
+              "url": "data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABkAAD/7gAOQWRvYmUAZMAAAAAB/9sAhAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAgICAgICAgICAgIDAwMDAwMDAwMDAQEBAQEBAQIBAQICAgECAgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP/wAARCAAFA+gDAREAAhEBAxEB/8QAnwABAQADAQAAAAAAAAAAAAAAAAkGBwgFAQEBAAMBAQAAAAAAAAAAAAAACAUGCQQHEAABAAgEAgUICwAAAAAAAAAA8CFRkQISIiMR4mOjMQUEFBUGFgFhwTITVAcIQYGhUgOUlXYXNwkRAAEBBAgEAgcJAQAAAAAAAAAR8AGhIyFRYZHRImIDEgQUBTEVsQK0BhY2CMFScrM0VFV1Bxf/2gAMAwEAAhEDEQA/AIJVMhflI5zaYHe0VMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAVMhflGbTACpkL8ozaYAzH4cY+PO5n7k5Nh+b8noNQ9+OL4G7snh0vMemmBiveBPI+a4v2j/AEFLSAycQAAAAAAAAAAAAAAAAAAAAAAADdvy9z/yXy9nZ3NuGHu/SvrMt2hOt9X8L/Q40z/RF+FtxK9i4oAs2mQyk8UBYkMooCxIZRQFiQyigLEhlFAWJDKKAsSGUUBYkMooCxIZRQFiQyigLEhlFAWJDKKAsSGUUBYkMooCxIZRQFiQyigLEhlFBOv/AEYx8BfD7Dh4t6a/sn8T0FMfTInn3ceDx6TYv6hxBv18fIvY1/md32f1yR5ZhyzAAAAAAAAAAAAAAAAAAAAAAAANk9y/adR6bJw6xVw4YedZa30w/K3cv7d/5DjS/eXg6rb4vHgMyvpIUsa5KZRfSQCUyi+kgEplF9JAJTKL6SASmUX0kAlMovpIBKZRfSQCUyi+kgEplF9JAJTKL6SASmUX0kAlMovpIBKZRfSQCUyi+kgEplF9JAJTKL6SASmUj182n9698PvdU7tT/oPQJPNxkTEzPJ/p3LXgdSvpjX/j/beH73M+0cz9pzceooMAAAAAAAAAAAAAAAAAAAAAAAA6O5D7TsPk+Hq9mcqx9X3H6MV4fafCe78HmfN8Sr1nMVlIdh4fI+S8F6Dlaz1bmntGPl2xMou3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+Auae0JdsQu3U69+B//Z",
+              "horizontalAlignment": "Center",
+              "fillMode": "RepeatHorizontally"
+            },
+            "items": [
+              {
+                "type": "TextBlock",
+                "style": "default",
+                "size": "Default",
+                "spacing": "none",
+                "text": " "
+              },
+              {
+                "type": "Container",
+                "minHeight": "333px",
+                "style": "default",
+                "bleed": true,
+                "backgroundImage": {
+                  "url": "https://helios-i.mashable.com/imagery/articles/00apgKgIAO4EnFfjOgCApRe/hero-image.fill.size_1248x702.v1619086604.jpg",
+                  "fillMode": "cover",
+                  "horizontalAlignment": "Center",
+                  "verticalAlignment": "Top"
+                },
+                "items": [
+                  {
+                    "type": "TextBlock",
+                    "style": "default",
+                    "text": " ",
+                    "spacing": "extraLarge",
+                    "separator": true,
+                    "verticalAlignment": "Top"
+                  },
+                  {
+                    "type": "TextBlock",
+                    "style": "default",
+                    "text": "Headling",
+                    "size": "ExtraLarge",
+                    "weight": "Bolder",
+                    "color": "Dark",
+                    "horizontalAlignment": "Center"
+                  }
+                ],
+                "verticalContentAlignment": "Center"
+              }
+            ],
+            "verticalContentAlignment": "Center"
+          },
+          {
+            "type": "Container",
+            "spacing": "none",
+            "style": "default",
+            "bleed": true,
+            "items": [
+              {
+                "type": "TextBlock",
+                "text": "# Important Announcement",
+                "style": "default",
+                "size": "Large",
+                "weight": "Bolder",
+                "horizontalAlignment": "Center"
+              }
+            ],
+            "verticalContentAlignment": "Center"
+          },
+          {
+            "type": "Container",
+            "spacing": "none",
+            "style": "default",
+            "bleed": true,
+            "items": [
+              {
+                "type": "TextBlock",
+                "text": "# Important Announcement \nhello world",
+                "size": "Default"
+              }
+            ],
+            "verticalContentAlignment": "Center"
+          }
+        ],
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.3"
+      }
+    }
+  ]
+}
